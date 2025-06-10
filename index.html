@@ -17,5 +17,24 @@
             <th>Read?</th>
         </tr>
     </table>
+    
+    <button class="btn" id="newBookBtn">New Book</button>
+
+    <dialog>
+        <form action="">
+            <input type="text" class=" input title-input" name="title" placeholder="Title" required>
+            <input type="text" class="input author-input" name="author" placeholder="Author" required>
+            <input type="number" class="input pages-input" min="1" placeholder="Pages count" required>
+            <p>Read the book?</p>
+            <input type="radio" id="no" name="read_status" value="fasle">
+            <label for="no">No</label>
+            <input type="radio" id="yes"name="read_status" value="true">
+            <label for="yes">Yes</label><br>
+            <button type="submit" class="btn" id="saveBook">Save</button>
+        </form>
+        
+    </dialog>
+   
+
 </body>
 </html>
