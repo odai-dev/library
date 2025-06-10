@@ -9,15 +9,20 @@ function Book(title, author, pages, readStatus) {
     this.id = crypto.randomUUID();
 }
 
+Book.prototype.toggleReadStatus = function() {
+    this.readStatus = !this.readStatus; // Toggles between true and false
+}
+
+
 function addBookToLibrary(title, author, pages, readStatus) {
     // takes params, create a book then store it in the addBookToLibrary
-    const book1 = new Book(title, author, pages,  readStatus)
-    myLibrary.push(book1)
+    const newBook = new Book(title, author, pages,  readStatus)
+    myLibrary.push(newBook)
 }
 
 function displayBooks() {
-    const tableBody = document.querySelector(".books-table-body")
-    tableBody.innerHTML = ""
+    const tableBody = document.querySelector(".books-table-body");
+    tableBody.innerHTML = "";
     myLibrary.forEach(book => {
         const row = document.createElement("tr")
         row.innerHTML = `
@@ -25,36 +30,61 @@ function displayBooks() {
         <td>${book.author}</td>
         <td>${book.pages}</td>
         <td>${book.readStatus ? 'Read' : 'Not Read'}</td> 
-        <td><button class="btn remove-book-btn" data-book-id="${book.id}">Remove</button></td>
+        <td>
+            <button class="btn toggle-read-btn" data-book-id="${book.id}">Toggle Read</button> 
+            <button class="btn remove-book-btn" data-book-id="${book.id}">Remove</button>
+        </td>
         `;
         tableBody.append(row)
     })
-    
-    attachRemoveButtonListeners();
+
+    attachButtonListeners();
 }
 
+// Function to remove a book from the library by its ID
 function removeBook(id) {
-    
-    const initalLength = myLibrary.length;
+    // Filter out the book with the matching ID and re-assign myLibrary
     myLibrary = myLibrary.filter(book => book.id !== id);
 
-    // Re-displayBooks after removal
+    // Re-display books to update the UI
     displayBooks();
-    
 }
 
-// Function to attach listeners to remove buttons
-function attachRemoveButtonListeners() {
+
+function attachButtonListeners() { 
+    // Attach listeners for "Remove" buttons
     document.querySelectorAll(".remove-book-btn").forEach(button => {
+        button.onclick = null; // Clear previous listeners
+        button.addEventListener('click', () => {
+            const bookId = button.dataset.bookId;
+            removeBook(bookId);
+        });
+    });
+
+    // Attach listeners for "Toggle Read" buttons
+    document.querySelectorAll(".toggle-read-btn").forEach(button => {
         button.onclick = null;
         button.addEventListener('click', () => {
             const bookId = button.dataset.bookId;
-            removeBook(bookId)
-        })
-    }) 
+            const bookToToggle = myLibrary.find(book => book.id === bookId);
+
+            if(bookToToggle) {
+                bookToToggle.toggleReadStatus(); // Call the prototype methode to toggle status
+                displayBooks();
+            } else {
+                console.warn(`Book with ID '${bookId}' not found for toggling read status.`);
+            }
+        });
+    });
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Add some initial books for testing purposes
+    addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 310, true);
+    addBookToLibrary("1984", "George Orwell", 328, false);
+    addBookToLibrary("Pride and Prejudice", "Jane Austen", 432, true);
+
     displayBooks();
 
     const dialog = document.querySelector("dialog");
@@ -98,5 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         displayBooks();
     })
 
+    
     
 })
