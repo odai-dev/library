@@ -20,19 +20,11 @@ function displayBooks() {
     const tabel = document.querySelector(".books-table")
     myLibrary.forEach(book => {
         const row = document.createElement("tr")
+        row.innerHTML = `<td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.pages}</td>
+        <td>${book.readStatus}</td>`
         tabel.append(row)
-        const titleCol = document.createElement("td")
-        titleCol.innerText = book.title
-        row.append(titleCol)
-        const authorCol = document.createElement("td")
-        authorCol.innerText = book.author
-        row.append(authorCol)
-        const pagesCol = document.createElement("td")
-        pagesCol.innerText = book.pages
-        row.append(pagesCol)
-        const readStatusCol = document.createElement("td")
-        readStatusCol.innerText = book.readStatus
-        row.append(readStatusCol)
     })
 }
 
