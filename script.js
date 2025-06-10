@@ -1,4 +1,4 @@
-const myLibrary = [];
+let myLibrary = [];
 
 function Book(title, author, pages, readStatus) {
     // the constructor
@@ -29,6 +29,8 @@ function displayBooks() {
         `;
         tableBody.append(row)
     })
+    
+    attachRemoveButtonListeners();
 }
 
 function removeBook(id) {
@@ -36,11 +38,6 @@ function removeBook(id) {
     const initalLength = myLibrary.length;
     myLibrary = myLibrary.filter(book => book.id !== id);
 
-        if (myLibrary.length < initialLength) {
-        console.log(`Book with ID '${id}' removed.`);
-    } else {
-        console.log(`Book with ID '${id}' not found.`);
-    }
     // Re-displayBooks after removal
     displayBooks();
     
